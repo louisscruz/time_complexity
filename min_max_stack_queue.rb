@@ -35,6 +35,10 @@ class MyStack
     peek[:min]
   end
 
+  def values
+    @store.map { |el| el[:value] }
+  end
+
   private
 
   def new_max(val)
@@ -48,38 +52,50 @@ class MyStack
 end
 
 class MinMaxStackQueue
+  attr_reader :current_stack
   def initialize
-    @stack1 = MyStack.new
-    @stack2 = MyStack.new
-    @current_stack = @stack1
-    @other_stack = @stack2
+    @inbox = MyStack.new
+    @outbox = MyStack.new
+    # @current_stack = @stack1
+    # @other_stack = @stack2
   end
 
   def enqueue(el)
-    @current_stack.push(el)
+    @inbox.push(el)
   end
 
   def dequeue
-    until @current_stack.size == 1
-      @other_stack.push(@current_stack.pop)
+    # until @current_stack.size == 1
+    #   @other_stack.push(@current_stack.pop)
+    # end
+    # @current_stack, @other_stack = @other_stack, @current_stack
+    # @other_stack.pop
+    until @inbox.empty?
+      @outbox.push(@inbox.pop)
     end
-    @current_stack,@other_stack = @other_stack,@current_stack
-    @other_stack.pop
+    @outbox.pop
+    until @outbox.empty?
+      @inbox.push(@outbox.pop)
+    end
   end
 
   def size
-    @current_stack.size
+    @inbox.size
   end
 
   def empty?
-    @current_stack.empty?
+    @inbox.empty?
   end
 
   def max
-    @current_stack.max
+    @inbox.max
   end
 
   def min
-    @current_stack.min
+    @inbox.min
+  end
+
+  def values
+    @inbox.values.each { |value| p value }
   end
 end

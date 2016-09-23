@@ -23,14 +23,15 @@ end
 def windowed_max_range(array,window)
   greatest_max_range = nil
   stack_queue = MinMaxStackQueue.new
-  until stack_queue.size == window
+  (array.length).times do
+    if stack_queue.size == window
+      stack_queue.dequeue
+    end
     stack_queue.enqueue(array.shift)
-  end
-  until array.empty?
-    p current_max_range = stack_queue.max - stack_queue.min
-    greatest_max_range = current_max_range if greatest_max_range.nil? || current_max_range > greatest_max_range
-    stack_queue.dequeue
-    stack_queue.enqueue(array.pop)
+    if stack_queue.size == window
+      current_max_range = stack_queue.max - stack_queue.min
+      greatest_max_range = current_max_range if greatest_max_range.nil? || current_max_range > greatest_max_range
+    end
   end
   greatest_max_range
 end
